@@ -65,15 +65,16 @@ import {
   nextTick,
   onMounted,
   onUnmounted,
-  PropType,
   reactive,
   ref,
   toRefs,
   watch,
 } from 'vue'
+import type { PropType } from 'vue'
 import Core from '@any-touch/core'
 import Pan from '@any-touch/pan'
-import { AudioPlayerOption, AudioPlayerOptionDefault } from './types'
+import { AudioPlayerOptionDefault } from './types'
+import type { AudioPlayerOption } from './types'
 import { formatSecond } from '../utils/util'
 import IconPlay from '../assets/images/play.png'
 import IconPause from '../assets/images/pause.png'
