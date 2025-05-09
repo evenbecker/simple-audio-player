@@ -12,6 +12,6 @@ export const AudioPlayerOptionDefault: AudioPlayerOption = {
   title: '',
   autoPlay: false,
   coverImage: '',
-  progressBarColor: '#5679ad',
-  indicatorColor: '#5679ad',
+  progressBarColor: '#0D6EFD',
+  indicatorColor: '#0D6EFD',
 }
