@@ -10,7 +10,7 @@
             :src="option_.coverImage ? option_.coverImage : CoverImageDefault"
           />
       
-      <div class="audio__player-play" @click="togglePlayer">
+      <div @click="togglePlayer">
           
           <div class="audio__player-play-icon">
             <img :src="isPlaying ? IconPause : IconPlay" />
@@ -263,7 +263,7 @@ export default defineComponent({
     }
     watch(
       () => props.option,
-      (newValue, oldValue) => {
+      (newValue) => {
         option_.value = mergeOption(newValue)
         initState()
         if (option_.value.autoPlay) {
@@ -323,11 +323,7 @@ export default defineComponent({
   align-items: center;
   
 }
-.audio__player-play {
-  /*position: relative;*/
-  /*flex:1;*/
-  
-}
+
 .audio__player img {
   
   /*width: 8rem;*/
