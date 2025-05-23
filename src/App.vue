@@ -63,7 +63,7 @@ const option1 = {
 <style>
 #app {
   margin: 0 auto;
-  background-color: #EFF0F1;
+  background-color: #FAFAFF;
   font-family: 'Verdana', cursive;
 
 }

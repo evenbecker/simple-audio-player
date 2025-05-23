@@ -1,56 +1,52 @@
 <template>
-  <div class="audio__player">
+  <div class="player">
     <div>
       <slot name="title">
-        <div v-if="option_.title" class="audio__player-title">
-          {{ option_.title }}
+        <div v-if="optionWatched.title" class="player-title">
+          {{ optionWatched.title }}
         </div>
       </slot>
       <img
-            :src="option_.coverImage ? option_.coverImage : CoverImageDefault"
-          />
-      
-      <div @click="togglePlayer">
-          
-          <div class="audio__player-play-icon">
+            :src="optionWatched.coverImage ? optionWatched.coverImage : CoverImageDefault"
+          />      
+      <div @click="togglePlayer">          
+          <div class="player-play-icon">
             <img :src="isPlaying ? IconPause : IconPlay" />
-          </div>
-        
+          </div>        
       </div>
-
     </div>
-    <div class="audio__player-progress-container">
+    <div class="player-progress-container">
       <div
         ref="audioProgressWrap"
-        class="audio__player-progress-wrap"
+        class="player-progress-wrap"
         @click.stop="handleClickProgressWrap"
       >
         <div
           ref="audioProgress"
-          class="audio__player-progress"
+          class="player-progress"
           :style="{
-            backgroundColor: option_.progressBarColor,
+            backgroundColor: optionWatched.progressBarColor,
           }"
         />
         <div
           ref="audioProgressPoint"
-          class="audio__player-progress-point"
+          class="player-progress-point"
           :style="{
-            backgroundColor: option_.indicatorColor,
-            boxShadow: `0 0 10px 0 ${option_.indicatorColor}`,
+            backgroundColor: optionWatched.indicatorColor,
+            boxShadow: `0 0 10px 0 ${optionWatched.indicatorColor}`,
           }"
           @panstart="handleProgressPanStart"
           @panend="handleProgressPanEnd"
           @panmove="handleProgressPanMove"
         />
       </div>
-      <div class="audio__player-time">
+      <div class="player-time">
         <span>{{ `${formatSecond(currentTime)} / ${totalTimeStr}` }}</span>
       </div>
     </div>
     <audio
       ref="audioPlayer"
-      :src="option_.src"
+      :src="optionWatched.src"
       @ended="onAudioEnded"
       @play="onAudioPlay"
       @pause="onAudioPause"
@@ -120,7 +116,7 @@ export default defineComponent({
     const audioProgressPoint = ref()
     const audioProgress = ref()
     const progressInterval = 200
-    const option_ = ref<AudioPlayerOption>(mergeOption(props.option))
+    const optionWatched = ref<AudioPlayerOption>(mergeOption(props.option))
     let toucher: any = null
     let timer: any = null
     const state = reactive({
@@ -131,7 +127,7 @@ export default defineComponent({
       totalTimeStr: '00:00',
     })
 
-    //tips: initialize the state when switch music.
+    //initialize the state 
     const initState = () => {
       state.isPlaying = false
       state.isDragging = false
@@ -264,9 +260,9 @@ export default defineComponent({
     watch(
       () => props.option,
       (newValue) => {
-        option_.value = mergeOption(newValue)
+        optionWatched.value = mergeOption(newValue)
         initState()
-        if (option_.value.autoPlay) {
+        if (optionWatched.value.autoPlay) {
           nextTick(() => {
             play()
           })
@@ -288,7 +284,7 @@ export default defineComponent({
 
     return {
       audioPlayer,
-      option_,
+      optionWatched,
       ...toRefs(state),
       onAudioEnded,
       onAudioPlay,
@@ -314,7 +310,7 @@ export default defineComponent({
 })
 </script>
 <style scoped>
-.audio__player {
+.player {
   display: flex;
   flex-direction: column;
   /*overflow: auto;*/
@@ -324,14 +320,14 @@ export default defineComponent({
   
 }
 
-.audio__player img {
+.player img {
   
   /*width: 8rem;*/
   height: 16rem;
   
   border-radius: 12px;
 }
-.audio__player-play-icon {
+.player-play-icon {
   position: relative;
 
   /*background: #f0f0f0;*/
@@ -340,21 +336,21 @@ export default defineComponent({
   padding: 0.5rem 0.5rem;
   /*opacity: 0.8;*/
 }
-.audio__player-play-icon img {
+.player-play-icon img {
   width: 1.6rem;
   height: 1.6rem;
   border-radius: 3px;
 }
-.audio__player-play-icon img:hover {
+.player-play-icon img:hover {
   opacity: 0.6;
 }
-.audio__player-progress-container {
+.player-progress-container {
   display: flex;
   flex-direction: column;
   width: 80%;
 }
 
-.audio__player-progress-wrap {
+.player-progress-wrap {
   position: relative;
   background: #ddd;
   height: 6px;
@@ -366,7 +362,7 @@ export default defineComponent({
   -webkit-user-drag: none;
 }
 
-.audio__player-progress {
+.player-progress {
   position: absolute;
   left: 0;
   top: 0;
@@ -375,7 +371,7 @@ export default defineComponent({
   border-radius: 3px;
 }
 
-.audio__player-progress-point {
+.player-progress-point {
   position: absolute;
   left: -8px;
   top: 50%;
@@ -385,7 +381,7 @@ export default defineComponent({
   margin-top: -8px;
 }
 
-.audio__player-progress-point:after {
+.player-progress-point:after {
   content: '';
   position: absolute;
   top: 50%;
@@ -396,15 +392,15 @@ export default defineComponent({
   /*background: #fff;*/
   border-radius: 50%;
 }
-.audio__player-time {
+.player-time {
   margin-top: 0.2rem;
   margin-left: auto;
 }
-.audio__player-time span {
+.player-time span {
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
-.audio__player-title {
+.player-title {
   text-align: center;
   font-size: 0.875rem;
   line-height: 3.25rem;
