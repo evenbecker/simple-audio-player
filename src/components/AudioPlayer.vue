@@ -7,8 +7,9 @@
         </div>
       </slot>
       <img
-            :src="optionWatched.coverImage ? optionWatched.coverImage : CoverImageDefault"
-          />      
+        class="img-responsive"
+        :src="optionWatched.coverImage ? optionWatched.coverImage : CoverImageDefault"
+      />      
       <div @click="togglePlayer">          
           <div class="player-play-icon">
             <img :src="isPlaying ? IconPause : IconPlay" />
@@ -206,7 +207,7 @@ export default defineComponent({
       emit('play')
     }
     const onLoadMetaData = (e: any) => {
-      console.log('onLoadMetaData', e)
+      //console.log('onLoadMetaData', e)
       setTotalTime(e.target.duration)
       emit('loadedmetadata', e)
     }
@@ -314,17 +315,17 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   /*overflow: auto;*/
-    margin-top: 10px;
+    
     /*justify-content: center;*/
   align-items: center;
   
 }
 
-.player img {
-  
-  /*width: 8rem;*/
-  height: 16rem;
-  
+.player img {    
+  /*height: 16rem;*/
+  width: 100%;
+  max-width: 800px;
+  object-fit: cover;
   border-radius: 12px;
 }
 .player-play-icon {
@@ -333,7 +334,7 @@ export default defineComponent({
   /*background: #f0f0f0;*/
   border-radius: 12px;
 
-  padding: 0.5rem 0.5rem;
+  padding-top: 0.5rem;
   /*opacity: 0.8;*/
 }
 .player-play-icon img {

@@ -11,14 +11,17 @@
         </select>          
       </div>
       <p class="reduceWidth">These mp3s were made freely available by the artists. All right reserved to Dry Cell and MagnetiC.</p>  
-      <a href="https://evenbecker.netlify.app/" class="btn btn-primary">Go to home</a>
-
+      <div class="myflex">
+        <button class="btn btn-primary" @click="popup"> about {{ option.title.substring(0, 9) }}</button>
+        <a href="https://evenbecker.netlify.app/" class="btn btn-secondary">Go to home</a>
+      </div>
     </div>   
   </div>  
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
 import AudioPlayer from './components/AudioPlayer.vue'
+import Swal from 'sweetalert2'
 
 const option1 = {
     src: "/assets/audio/02-My-Time-to-Shine.mp3",
@@ -41,7 +44,28 @@ const option1 = {
   
   option.value = option1;
   
-
+function popup(){
+  if(option.value.title === option1.title){
+  Swal.fire({      
+    imageUrl: "/assets/Magnetic/magneticFinal.png",
+    //imageHeight: 1500,
+    imageAlt: "photos",
+    html: `
+    MagnetiC was formed in autumn 2009 in Moscow. The band style might be described as rough alternative with nu metal. In 2012 MagnetiC has recorded debut album 'One Step to the Sun' and shot first musical video. Sadly, the label didn't officially release the album. The reason is unknown. The band is currently on hiatus. Their album is available on 
+    <a href="https://soundcloud.com/marinamagnetic" target="_blank">Soundcloud</a>.
+  `
+  });
+}else{
+  Swal.fire({    
+    html: `Dry Cell was an American nu metal band formed in 1998 in California. In 2001, they recorded their first album in the same studio than Linkin Park, Trust Company and Papa Roach. Chester was there when they recorded "Body Crumbles". The band is defunct since 2010. More info on <a href="https://en.wikipedia.org/wiki/Dry_Cell_(band)" target="_blank">Wikipedia</a>. You can listen to their songs on
+    <a href="https://www.last.fm/music/Dry+Cell/+wiki" target="_blank">last.fm</a>.
+  `,   
+    imageUrl: "/assets/drycell-logo.png",
+    //imageHeight: 1500,
+    imageAlt: "photos"
+  });
+}
+}
  
   function onChange(event: Event) {
             console.log((event.target as HTMLInputElement).value);
@@ -57,6 +81,7 @@ const option1 = {
             //option.value = option3; 
             //option.value = (event.target as HTMLInputElement).value; 
             //(event.target as HTMLInputElement).value;
+            
         }
         
 </script>
@@ -68,18 +93,12 @@ const option1 = {
 
 }
 .centered {
-  margin-top: 25px;
-  /*
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  */
+  margin-bottom: 3rem;
   /*background-color: rgb(220, 241, 246);*/
   text-align: center;
 }
 #south{
-  margin-top: 20px;
+  margin-top: 6px;
   width: 100%;
   text-align: center;
   display: flex;
@@ -88,10 +107,16 @@ const option1 = {
 }
 #theSelect{
   width: 280px;
-  margin-bottom: 30px;
+  margin-bottom: 1.75rem;
+}
+.myflex{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
 }
 p.reduceWidth{
   width: 80%;
-  margin-bottom: 30px;
+  margin-bottom: 1.75rem;
 }
 </style>
