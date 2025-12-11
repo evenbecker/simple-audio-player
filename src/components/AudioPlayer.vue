@@ -2,58 +2,33 @@
   <div class="player">
     <div>
       <slot name="title">
-        <div v-if="optionWatched.title" class="player-title">
+        <div v-if="optionWatched.title" class="player-title" :class="optionWatched.drkmode ? 'text-light' : ''">
           {{ optionWatched.title }}
         </div>
       </slot>
-      <img
-        class="img-responsive"
-        :src="optionWatched.coverImage ? optionWatched.coverImage : CoverImageDefault"
-      />      
-      <div @click="togglePlayer">          
-          <div class="player-play-icon">
-            <img :src="isPlaying ? IconPause : IconPlay" />
-          </div>        
+      <img class="img-responsive" :src="optionWatched.coverImage ? optionWatched.coverImage : CoverImageDefault" />
+      <div @click="togglePlayer">
+        <div class="player-play-icon">
+          <img :src="isPlaying ? IconPause : IconPlay" />
+        </div>
       </div>
     </div>
     <div class="player-progress-container">
-      <div
-        ref="audioProgressWrap"
-        class="player-progress-wrap"
-        @click.stop="handleClickProgressWrap"
-      >
-        <div
-          ref="audioProgress"
-          class="player-progress"
-          :style="{
-            backgroundColor: optionWatched.progressBarColor,
-          }"
-        />
-        <div
-          ref="audioProgressPoint"
-          class="player-progress-point"
-          :style="{
-            backgroundColor: optionWatched.indicatorColor,
-            boxShadow: `0 0 10px 0 ${optionWatched.indicatorColor}`,
-          }"
-          @panstart="handleProgressPanStart"
-          @panend="handleProgressPanEnd"
-          @panmove="handleProgressPanMove"
-        />
+      <div ref="audioProgressWrap" class="player-progress-wrap" @click.stop="handleClickProgressWrap">
+        <div ref="audioProgress" class="player-progress" :style="{
+          backgroundColor: optionWatched.progressBarColor,
+        }" />
+        <div ref="audioProgressPoint" class="player-progress-point" :style="{
+          backgroundColor: optionWatched.indicatorColor,
+          boxShadow: `0 0 10px 0 ${optionWatched.indicatorColor}`,
+        }" @panstart="handleProgressPanStart" @panend="handleProgressPanEnd" @panmove="handleProgressPanMove" />
       </div>
-      <div class="player-time">
+      <div class="player-time" :class="optionWatched.drkmode ? 'text-light' : ''">
         <span>{{ `${formatSecond(currentTime)} / ${totalTimeStr}` }}</span>
       </div>
     </div>
-    <audio
-      ref="audioPlayer"
-      :src="optionWatched.src"
-      @ended="onAudioEnded"
-      @play="onAudioPlay"
-      @pause="onAudioPause"
-      @loadedmetadata="onLoadMetaData"
-      @timeupdate="onTimeUpdate"
-    ></audio>
+    <audio ref="audioPlayer" :src="optionWatched.src" @ended="onAudioEnded" @play="onAudioPlay" @pause="onAudioPause"
+      @loadedmetadata="onLoadMetaData" @timeupdate="onTimeUpdate"></audio>
   </div>
 </template>
 <script lang="ts">
@@ -83,11 +58,12 @@ const mergeOption = (option: AudioPlayerOption): AudioPlayerOption => {
     title: option.title || AudioPlayerOptionDefault.title,
     autoPlay: option.autoPlay || AudioPlayerOptionDefault.autoPlay,
     coverImage: option.coverImage || AudioPlayerOptionDefault.coverImage,
-    
+
     progressBarColor:
       option.progressBarColor || AudioPlayerOptionDefault.progressBarColor,
     indicatorColor:
       option.indicatorColor || AudioPlayerOptionDefault.indicatorColor,
+    drkmode: option.drkmode || AudioPlayerOptionDefault.drkmode,
   }
 }
 
@@ -150,7 +126,7 @@ export default defineComponent({
       emit('playing')
     }
     const startTimer = () => {
-     
+
       clearTimer()
       timer = window.setInterval(playUpdate, progressInterval)
       state.isPlaying = true
@@ -185,7 +161,7 @@ export default defineComponent({
       }
     }
     const setTotalTime = (seconds: number) => {
-      
+
       state.totalTime = seconds
       state.totalTimeStr = formatSecond(state.totalTime)
     }
@@ -215,9 +191,8 @@ export default defineComponent({
       emit('timeupdate', event)
     }
     const setPointPosition = (offsetLeft: number) => {
-      audioProgressPoint.value.style.left = `${
-        offsetLeft - audioProgressPoint.value.offsetWidth / 2
-      }px`
+      audioProgressPoint.value.style.left = `${offsetLeft - audioProgressPoint.value.offsetWidth / 2
+        }px`
     }
     const handleProgressPanStart = (event: any) => {
       state.isDragging = true
@@ -315,36 +290,43 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   /*overflow: auto;*/
-    
-    /*justify-content: center;*/
+
+  /*justify-content: center;*/
   align-items: center;
-  
+
 }
 
-.player img {    
+.player img {
   /*height: 16rem;*/
   width: 100%;
   max-width: 800px;
   object-fit: cover;
   border-radius: 12px;
+  margin-bottom: 0.25rem;
 }
+
 .player-play-icon {
   position: relative;
-
-  /*background: #f0f0f0;*/
-  border-radius: 12px;
+  width: 10%;
+  margin: 0 auto;
+  background: lightgray;
+  border-radius: 18px;
 
   padding-top: 0.5rem;
+  padding-bottom: 0.35rem;
   /*opacity: 0.8;*/
 }
+
 .player-play-icon img {
   width: 1.6rem;
   height: 1.6rem;
   border-radius: 3px;
 }
+
 .player-play-icon img:hover {
   opacity: 0.6;
 }
+
 .player-progress-container {
   display: flex;
   flex-direction: column;
@@ -393,14 +375,17 @@ export default defineComponent({
   /*background: #fff;*/
   border-radius: 50%;
 }
+
 .player-time {
   margin-top: 0.2rem;
   margin-left: auto;
 }
+
 .player-time span {
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
+
 .player-title {
   text-align: center;
   font-size: 0.875rem;
@@ -408,5 +393,4 @@ export default defineComponent({
   font-weight: bold;
   color: #3c3c3c;
 }
-
 </style>
