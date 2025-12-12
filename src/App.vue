@@ -3,7 +3,7 @@
     <div id="header">
       <div class="form-check form-switch mx-3 mt-2">
         <input type="checkbox" class="form-check-input me-2" id="darkSwitch" v-model="darkMode" />
-        <label :class="darkMode ? 'text-light' : ''" for="darkSwitch">Dark Mode</label>
+        <label :class="darkMode ? 'text-light' : ''" for="darkSwitch">Dark mode</label>
       </div>
     </div>
     <AudioPlayer :option="option" />
@@ -12,8 +12,8 @@
       <div id="theSelect">
         <select name="MySelect" @change="onChange($event)" class="form-select"
           :class="darkMode ? 'bg-dark text-white' : ''" aria-label="Default select example">
-          <option value="option1">MagnetiC - My Time to Shine</option>
           <option value="option2">Dry Cell - PeeWee</option>
+          <option value="option1">MagnetiC - My Time to Shine</option>
           <option value="option3">Dry Cell - The Lie</option>
         </select>
       </div>
