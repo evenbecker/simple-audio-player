@@ -35,14 +35,19 @@
             These mp3s were made freely available by the artists. All right
             reserved to Dry Cell and MagnetiC.
           </p>
-          <div class="myflex">
-            <button class="btn btn-primary" @click="popup">
+
+          <div class="imgbox mt-2">
+            <img class="img-fluid" src="/assets/ocean.png" alt="Ocean style" />
+            <button
+              id="left-btn"
+              class="btn btn-secondary btn-lg"
+              @click="popup"
+            >
               about {{ option.title.substring(0, 9) }}
             </button>
-            <a href="blog" class="btn btn-secondary">Check my blog</a>
-          </div>
-          <div class="mt-2">
-            <img class="img-fluid" src="/assets/ocean.png" alt="Ocean style" />
+            <a href="blog" class="btn btn-secondary btn-lg" id="right-btn"
+              >Check my blog</a
+            >
           </div>
         </div>
       </div>
@@ -117,6 +122,19 @@ function onChange(event: Event) {
 }
 </script>
 <style>
+.imgbox {
+  position: relative;
+}
+#right-btn {
+  position: absolute;
+  bottom: 280px;
+  right: 220px;
+}
+#left-btn {
+  position: absolute;
+  bottom: 280px;
+  right: 580px;
+}
 #south {
   margin-top: 6px;
   width: 100%;
@@ -127,7 +145,7 @@ function onChange(event: Event) {
 }
 
 #theSelect {
-  width: 280px;
+  min-width: 310px;
   margin-bottom: 1.75rem;
 }
 

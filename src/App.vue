@@ -27,7 +27,7 @@ import { RouterView } from "vue-router";
   justify-content: center;
   align-items: center;
   color: hsl(0, 0%, 96%);
-  background-color: #4e4eac;
+  background-color: rgb(11, 82, 188);
 }
 
 #footer > p {
