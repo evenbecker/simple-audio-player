@@ -1,12 +1,23 @@
 <template>
-  <div class="player">
+  <div class="player mt-5">
     <div>
       <slot name="title">
-        <div v-if="optionWatched.title" class="player-title" :class="optionWatched.drkmode ? 'text-light' : ''">
+        <div
+          v-if="optionWatched.title"
+          class="player-title"
+          :class="optionWatched.drkmode ? 'text-light' : ''"
+        >
           {{ optionWatched.title }}
         </div>
       </slot>
-      <img class="img-responsive" :src="optionWatched.coverImage ? optionWatched.coverImage : CoverImageDefault" />
+      <img
+        class="img-responsive"
+        :src="
+          optionWatched.coverImage
+            ? optionWatched.coverImage
+            : CoverImageDefault
+        "
+      />
       <div @click="togglePlayer">
         <div class="player-play-icon">
           <img :src="isPlaying ? IconPause : IconPlay" />
@@ -14,21 +25,46 @@
       </div>
     </div>
     <div class="player-progress-container">
-      <div ref="audioProgressWrap" class="player-progress-wrap" @click.stop="handleClickProgressWrap">
-        <div ref="audioProgress" class="player-progress" :style="{
-          backgroundColor: optionWatched.progressBarColor,
-        }" />
-        <div ref="audioProgressPoint" class="player-progress-point" :style="{
-          backgroundColor: optionWatched.indicatorColor,
-          boxShadow: `0 0 10px 0 ${optionWatched.indicatorColor}`,
-        }" @panstart="handleProgressPanStart" @panend="handleProgressPanEnd" @panmove="handleProgressPanMove" />
+      <div
+        ref="audioProgressWrap"
+        class="player-progress-wrap"
+        @click.stop="handleClickProgressWrap"
+      >
+        <div
+          ref="audioProgress"
+          class="player-progress"
+          :style="{
+            backgroundColor: optionWatched.progressBarColor,
+          }"
+        />
+        <div
+          ref="audioProgressPoint"
+          class="player-progress-point"
+          :style="{
+            backgroundColor: optionWatched.indicatorColor,
+            boxShadow: `0 0 10px 0 ${optionWatched.indicatorColor}`,
+          }"
+          @panstart="handleProgressPanStart"
+          @panend="handleProgressPanEnd"
+          @panmove="handleProgressPanMove"
+        />
       </div>
-      <div class="player-time" :class="optionWatched.drkmode ? 'text-light' : ''">
+      <div
+        class="player-time"
+        :class="optionWatched.drkmode ? 'text-light' : ''"
+      >
         <span>{{ `${formatSecond(currentTime)} / ${totalTimeStr}` }}</span>
       </div>
     </div>
-    <audio ref="audioPlayer" :src="optionWatched.src" @ended="onAudioEnded" @play="onAudioPlay" @pause="onAudioPause"
-      @loadedmetadata="onLoadMetaData" @timeupdate="onTimeUpdate"></audio>
+    <audio
+      ref="audioPlayer"
+      :src="optionWatched.src"
+      @ended="onAudioEnded"
+      @play="onAudioPlay"
+      @pause="onAudioPause"
+      @loadedmetadata="onLoadMetaData"
+      @timeupdate="onTimeUpdate"
+    ></audio>
   </div>
 </template>
 <script lang="ts">
@@ -41,16 +77,16 @@ import {
   ref,
   toRefs,
   watch,
-} from 'vue'
-import type { PropType } from 'vue'
-import Core from '@any-touch/core'
-import Pan from '@any-touch/pan'
-import { AudioPlayerOptionDefault } from './types'
-import type { AudioPlayerOption } from './types'
-import { formatSecond } from '../utils/util'
-import IconPlay from '../assets/images/play.png'
-import IconPause from '../assets/images/pause.png'
-import CoverImageDefault from '../assets/images/cover.png'
+} from "vue";
+import type { PropType } from "vue";
+import Core from "@any-touch/core";
+import Pan from "@any-touch/pan";
+import { AudioPlayerOptionDefault } from "./types";
+import type { AudioPlayerOption } from "./types";
+import { formatSecond } from "../utils/util";
+import IconPlay from "../assets/images/play.png";
+import IconPause from "../assets/images/pause.png";
+import CoverImageDefault from "../assets/images/cover.png";
 
 const mergeOption = (option: AudioPlayerOption): AudioPlayerOption => {
   return {
@@ -64,8 +100,8 @@ const mergeOption = (option: AudioPlayerOption): AudioPlayerOption => {
     indicatorColor:
       option.indicatorColor || AudioPlayerOptionDefault.indicatorColor,
     drkmode: option.drkmode || AudioPlayerOptionDefault.drkmode,
-  }
-}
+  };
+};
 
 export default defineComponent({
   props: {
@@ -75,188 +111,187 @@ export default defineComponent({
     },
   },
   emits: [
-    'loadedmetadata',
-    'playing',
-    'play',
-    'play-error',
-    'timeupdate',
-    'pause',
-    'ended',
-    'progress-start',
-    'progress-end',
-    'progress-move',
-    'progress-click',
+    "loadedmetadata",
+    "playing",
+    "play",
+    "play-error",
+    "timeupdate",
+    "pause",
+    "ended",
+    "progress-start",
+    "progress-end",
+    "progress-move",
+    "progress-click",
   ],
   setup(props, { emit }) {
-    const audioPlayer = ref()
-    const audioProgressWrap = ref()
-    const audioProgressPoint = ref()
-    const audioProgress = ref()
-    const progressInterval = 200
-    const optionWatched = ref<AudioPlayerOption>(mergeOption(props.option))
-    let toucher: any = null
-    let timer: any = null
+    const audioPlayer = ref();
+    const audioProgressWrap = ref();
+    const audioProgressPoint = ref();
+    const audioProgress = ref();
+    const progressInterval = 200;
+    const optionWatched = ref<AudioPlayerOption>(mergeOption(props.option));
+    let toucher: any = null;
+    let timer: any = null;
     const state = reactive({
       isPlaying: false,
       isDragging: false,
       currentTime: 0,
       totalTime: 0,
-      totalTimeStr: '00:00',
-    })
+      totalTimeStr: "00:00",
+    });
 
-    //initialize the state 
+    //initialize the state
     const initState = () => {
-      state.isPlaying = false
-      state.isDragging = false
-      state.currentTime = 0
-      state.totalTime = 0
-      state.totalTimeStr = '00:00'
-    }
+      state.isPlaying = false;
+      state.isDragging = false;
+      state.currentTime = 0;
+      state.totalTime = 0;
+      state.totalTimeStr = "00:00";
+    };
 
     const playUpdate = () => {
       if (state.isDragging) {
-        return
+        return;
       }
       const offsetLeft =
         (audioPlayer.value.currentTime / audioPlayer.value.duration) *
-        audioProgressWrap.value.offsetWidth
-      state.currentTime = audioPlayer.value.currentTime
-      audioProgress.value.style.width = `${offsetLeft}px`
-      setPointPosition(offsetLeft)
-      emit('playing')
-    }
+        audioProgressWrap.value.offsetWidth;
+      state.currentTime = audioPlayer.value.currentTime;
+      audioProgress.value.style.width = `${offsetLeft}px`;
+      setPointPosition(offsetLeft);
+      emit("playing");
+    };
     const startTimer = () => {
-
-      clearTimer()
-      timer = window.setInterval(playUpdate, progressInterval)
-      state.isPlaying = true
-    }
+      clearTimer();
+      timer = window.setInterval(playUpdate, progressInterval);
+      state.isPlaying = true;
+    };
     const clearTimer = () => {
       if (timer) {
-        window.clearInterval(timer)
-        timer = null
+        window.clearInterval(timer);
+        timer = null;
       }
-    }
+    };
     const play = () => {
       audioPlayer.value
         .play()
         .then(() => {
-          startTimer()
-          console.log('startTimer done')
-          setTotalTime(audioPlayer.value.duration)
+          startTimer();
+          console.log("startTimer done");
+          setTotalTime(audioPlayer.value.duration);
         })
         .catch((error: any) => {
-          emit('play-error', error)
-        })
-    }
+          emit("play-error", error);
+        });
+    };
     const pause = () => {
-      audioPlayer.value.pause()
-      state.isPlaying = false
-    }
+      audioPlayer.value.pause();
+      state.isPlaying = false;
+    };
     const togglePlayer = () => {
       if (state.isPlaying) {
-        pause()
+        pause();
       } else {
-        play()
+        play();
       }
-    }
+    };
     const setTotalTime = (seconds: number) => {
-
-      state.totalTime = seconds
-      state.totalTimeStr = formatSecond(state.totalTime)
-    }
+      state.totalTime = seconds;
+      state.totalTimeStr = formatSecond(state.totalTime);
+    };
     const onAudioEnded = () => {
-      console.log('onAudioEnded')
-      state.isPlaying = false
-      clearTimer()
-      emit('ended')
-    }
+      console.log("onAudioEnded");
+      state.isPlaying = false;
+      clearTimer();
+      emit("ended");
+    };
     const onAudioPause = () => {
-      console.log('onAudioPause')
-      state.isPlaying = false
-      clearTimer()
-      emit('pause')
-    }
+      console.log("onAudioPause");
+      state.isPlaying = false;
+      clearTimer();
+      emit("pause");
+    };
     const onAudioPlay = () => {
-      console.log('onAudioPlay')
-      state.isPlaying = true
-      emit('play')
-    }
+      console.log("onAudioPlay");
+      state.isPlaying = true;
+      emit("play");
+    };
     const onLoadMetaData = (e: any) => {
       //console.log('onLoadMetaData', e)
-      setTotalTime(e.target.duration)
-      emit('loadedmetadata', e)
-    }
+      setTotalTime(e.target.duration);
+      emit("loadedmetadata", e);
+    };
     const onTimeUpdate = (event: any) => {
-      emit('timeupdate', event)
-    }
+      emit("timeupdate", event);
+    };
     const setPointPosition = (offsetLeft: number) => {
-      audioProgressPoint.value.style.left = `${offsetLeft - audioProgressPoint.value.offsetWidth / 2
-        }px`
-    }
+      audioProgressPoint.value.style.left = `${
+        offsetLeft - audioProgressPoint.value.offsetWidth / 2
+      }px`;
+    };
     const handleProgressPanStart = (event: any) => {
-      state.isDragging = true
-      emit('progress-start', event)
-    }
+      state.isDragging = true;
+      emit("progress-start", event);
+    };
 
     const handleProgressPanEnd = (event: any) => {
-      audioPlayer.value.currentTime = state.currentTime
-      play()
-      state.isDragging = false
-      emit('progress-end', event)
-    }
+      audioPlayer.value.currentTime = state.currentTime;
+      play();
+      state.isDragging = false;
+      emit("progress-end", event);
+    };
 
     const handleProgressPanMove = (event: any) => {
-      const pageX = event.x
-      const bcr = event.target.getBoundingClientRect()
-      const targetLeft = parseInt(getComputedStyle(event.target).left)
-      let offsetLeft = targetLeft + (pageX - bcr.left)
-      offsetLeft = Math.min(offsetLeft, audioProgressWrap.value.offsetWidth)
-      offsetLeft = Math.max(offsetLeft, 0)
-      setPointPosition(offsetLeft)
-      audioProgress.value.style.width = `${offsetLeft}px`
+      const pageX = event.x;
+      const bcr = event.target.getBoundingClientRect();
+      const targetLeft = parseInt(getComputedStyle(event.target).left);
+      let offsetLeft = targetLeft + (pageX - bcr.left);
+      offsetLeft = Math.min(offsetLeft, audioProgressWrap.value.offsetWidth);
+      offsetLeft = Math.max(offsetLeft, 0);
+      setPointPosition(offsetLeft);
+      audioProgress.value.style.width = `${offsetLeft}px`;
       state.currentTime =
-        (offsetLeft / audioProgressWrap.value.offsetWidth) * state.totalTime
-      emit('progress-move', event)
-    }
+        (offsetLeft / audioProgressWrap.value.offsetWidth) * state.totalTime;
+      emit("progress-move", event);
+    };
 
     const handleClickProgressWrap = (event: any) => {
-      const { offsetX } = event
+      const { offsetX } = event;
       if (event.target === audioProgressPoint.value) {
-        return
+        return;
       }
       state.currentTime =
-        (offsetX / audioProgressWrap.value.offsetWidth) * state.totalTime
-      audioPlayer.value.currentTime = state.currentTime
-      setPointPosition(offsetX)
-      audioProgress.value.style.width = `${offsetX}px`
-      play()
-      emit('progress-click', event)
-    }
+        (offsetX / audioProgressWrap.value.offsetWidth) * state.totalTime;
+      audioPlayer.value.currentTime = state.currentTime;
+      setPointPosition(offsetX);
+      audioProgress.value.style.width = `${offsetX}px`;
+      play();
+      emit("progress-click", event);
+    };
     watch(
       () => props.option,
       (newValue) => {
-        optionWatched.value = mergeOption(newValue)
-        initState()
+        optionWatched.value = mergeOption(newValue);
+        initState();
         if (optionWatched.value.autoPlay) {
           nextTick(() => {
-            play()
-          })
+            play();
+          });
         }
       },
-      { deep: true },
-    )
+      { deep: true }
+    );
     onMounted(() => {
-      toucher = new Core(document.getElementById('app') || undefined, {
+      toucher = new Core(document.getElementById("app") || undefined, {
         preventDefault: false,
-      })
-      toucher.use(Pan)
-    })
+      });
+      toucher.use(Pan);
+    });
 
     onUnmounted(() => {
-      if (toucher) toucher.destroy()
+      if (toucher) toucher.destroy();
       // pause()
-    })
+    });
 
     return {
       audioPlayer,
@@ -281,19 +316,17 @@ export default defineComponent({
       IconPlay,
       IconPause,
       CoverImageDefault,
-    }
+    };
   },
-})
+});
 </script>
 <style scoped>
 .player {
   display: flex;
   flex-direction: column;
-  /*overflow: auto;*/
 
   /*justify-content: center;*/
   align-items: center;
-
 }
 
 .player img {
@@ -321,6 +354,8 @@ export default defineComponent({
   width: 1.6rem;
   height: 1.6rem;
   border-radius: 3px;
+  margin-left: 1.7rem;
+  margin-bottom: 0.1rem;
 }
 
 .player-play-icon img:hover {
@@ -365,7 +400,7 @@ export default defineComponent({
 }
 
 .player-progress-point:after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;

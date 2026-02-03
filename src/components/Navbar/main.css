@@ -1,0 +1,10 @@
+nav {
+  padding: 0;
+  height: 20px;
+}
+
+.navbar-links {
+  cursor: pointer;
+  /*text-decoration: none;*/
+  text-decoration-line: none;
+}
