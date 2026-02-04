@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import { RouterLink } from "vue-router";
+/*import { RouterLink } from "vue-router";*/
 import { defineComponent } from "vue";
 import "./main.css";
 
