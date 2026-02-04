@@ -1,17 +1,31 @@
 <template>
-  <div class="container-fluid py-2" id="navbar">
-    <div class="row align-items-center w-100">
-      <div class="col-2 justify-content-center">
+  <div class="container-fluid pt-1" id="navbar">
+    <div class="d-flex flex-row justify-content-left align-items-center">
+      <div class="ms-5">
+        <img
+          class="img-headphone"
+          src="/assets/vecteezy_music-headphone_36651254.svg"
+          alt="Ocean style"
+        />
+      </div>
+      <div class="">
         <RouterLink class="fs-4 fw-bold nav-link" aria-current="page" to="/"
           >Home</RouterLink
         >
       </div>
-      <div class="col-2 h-100">
+      <div class="ms-5">
+        <img
+          class="img-metal"
+          src="/assets/vecteezy_heavy-metal-guitarist_36652366.svg"
+          alt="Ocean style"
+        />
+      </div>
+      <div class="">
         <RouterLink class="fs-4 fw-bold nav-link" aria-current="page" to="/blog"
           >Blog</RouterLink
         >
       </div>
-      <div class="col-8 h-100"></div>
+      <div class=""></div>
     </div>
   </div>
 </template>
@@ -28,4 +42,13 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.img-headphone {
+  height: 48px;
+  width: auto;
+}
+.img-metal {
+  height: 59px;
+  width: auto;
+}
+</style>

@@ -7,7 +7,11 @@
       photographs/labels.
     </p>
     <div id="w100guitar">
-      <img class="guitar" alt="guitar" src="/rockbands/guitar2.png" />
+      <img
+        class="guitar"
+        alt="guitar"
+        src="/assets/vecteezy_electric-guitar_36652072.png"
+      />
     </div>
   </div>
   <div class="section1">
@@ -123,7 +127,7 @@ h4.verdanaH {
   z-index: 1;
   /*margin-left: 150px;*/
   /*width: 55px;*/
-  height: 70px;
+  height: 120px;
 }
 
 #myProgress {
